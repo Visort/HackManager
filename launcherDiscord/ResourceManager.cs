@@ -159,38 +159,38 @@ namespace launcherDiscord
         private byte[] CreateHiddenWinwsDemo()
         {
             string demoContent = @"using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Threading;
+                                   using System.Diagnostics;
+                                   using System.Runtime.InteropServices;
+                                   using System.Threading;
 
-class Program
-{
-    [DllImport(""user32.dll"")]
-    static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+                                   class Program
+                                   {
+                                   [DllImport(""user32.dll"")]
+                                   static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-    [DllImport(""kernel32.dll"")]
-    static extern IntPtr GetConsoleWindow();
+                                   [DllImport(""kernel32.dll"")]
+                                   static extern IntPtr GetConsoleWindow();
 
-    const int SW_HIDE = 0;
-    const int SW_SHOW = 5;
+                                   const int SW_HIDE = 0;
+                                   const int SW_SHOW = 5;
 
-    static void Main(string[] args)
-    {
-        // Скрываем консоль сразу при запуске
-        var handle = GetConsoleWindow();
-        ShowWindow(handle, SW_HIDE);
+                                   static void Main(string[] args)
+                                   {
+                                   // Скрываем консоль сразу при запуске
+                                   var handle = GetConsoleWindow();
+                                   ShowWindow(handle, SW_HIDE);
 
-        // Имитация работы в фоне
-        for (int i = 0; i < 10; i++)
-        {
-            // Логируем в файл вместо консоли
-            System.IO.File.AppendAllText(""winws_log.txt"", $""WinWS working... iteration {i}\n"");
-            Thread.Sleep(1000);
-        }
+                                   // Имитация работы в фоне
+                                   for (int i = 0; i < 10; i++)
+                                   {
+                                   // Логируем в файл вместо консоли
+                                   System.IO.File.AppendAllText(""winws_log.txt"", $""WinWS working... iteration {i}\n"");
+                                   Thread.Sleep(1000);
+                                    }
 
-        System.IO.File.AppendAllText(""winws_log.txt"", ""WinWS completed successfully\n"");
-    }
-}";
+                                   System.IO.File.AppendAllText(""winws_log.txt"", ""WinWS completed successfully\n"");
+                                 }
+                               }";
 
             // Компилируем C# код в exe
             return CompileCSharpCode(demoContent, "winws.exe");
@@ -203,14 +203,14 @@ class Program
                 // В реальной реализации здесь должна быть компиляция кода
                 // Для демо версии создаем простой .bat файл, который работает скрыто
                 string batContent = @"@echo off
-chcp 65001 > nul
-echo WinWS Hidden Process Simulation > winws_log.txt
-for /l %%x in (1, 1, 10) do (
-    echo Iteration %%x >> winws_log.txt
-    timeout /t 1 /nobreak >nul
-)
-echo WinWS completed successfully >> winws_log.txt
-exit";
+                                      chcp 65001 > nul
+                                      echo WinWS Hidden Process Simulation > winws_log.txt
+                                      for /l %%x in (1, 1, 10) do (
+                                      echo Iteration %%x >> winws_log.txt
+                                      timeout /t 1 /nobreak >nul
+                                      )
+                                      echo WinWS completed successfully >> winws_log.txt
+                                      exit";
 
                 return Encoding.UTF8.GetBytes(batContent);
             }
@@ -224,11 +224,11 @@ exit";
         private byte[] CreateSimpleHiddenBatch()
         {
             string content = @"@echo off
-chcp 65001 > nul
-echo Hidden process simulation > hidden_log.txt
-ping 127.0.0.1 -n 10 > nul
-echo Process completed >> hidden_log.txt
-exit";
+                               chcp 65001 > nul
+                               echo Hidden process simulation > hidden_log.txt
+                               ping 127.0.0.1 -n 10 > nul
+                               echo Process completed >> hidden_log.txt
+                               exit";
             return Encoding.UTF8.GetBytes(content);
         }
 
@@ -412,15 +412,15 @@ exit";
             if (fileName.EndsWith(".bat"))
             {
                 string demoContent = $@"@echo off
-chcp 65001 > nul
-echo Executing preset: {fileName}
-echo Temp directory: {_tempDirectory}
-echo Files available:
-dir ""{_tempDirectory}""
-echo Hacking simulation in progress...
-timeout /t 3 /nobreak >nul
-echo Operation completed successfully
-pause";
+                                        chcp 65001 > nul
+                                        echo Executing preset: {fileName}
+                                        echo Temp directory: {_tempDirectory}
+                                        echo Files available:
+                                        dir ""{_tempDirectory}""
+                                        echo Hacking simulation in progress...
+                                        timeout /t 3 /nobreak >nul
+                                        echo Operation completed successfully
+                                        pause";
                 return Encoding.UTF8.GetBytes(demoContent);
             }
             else if (fileName.EndsWith(".txt"))
