@@ -67,10 +67,7 @@
             "general (ALT7)",
             "general (FAKE TLS AUTO ALT)",
             "general (FAKE TLS AUTO ALT2)",
-            "general (FAKE TLS AUTO ALT3)",
-            "general (FAKE TLS AUTO)",
-            "general (SIMPLE FAKE ALT)",
-            "general (SIMPLE FAKE)"});
+            "general (FAKE TLS AUTO)"});
             this.cbSelected.Location = new System.Drawing.Point(36, 81);
             this.cbSelected.Name = "cbSelected";
             this.cbSelected.Size = new System.Drawing.Size(257, 23);
