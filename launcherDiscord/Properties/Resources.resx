@@ -121,51 +121,6 @@
   <data name="cygwin1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\cygwin1.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="general" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general.bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__ALT2_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (ALT2).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__ALT3_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (ALT3).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__ALT4_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (ALT4).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__ALT5_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (ALT5).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__ALT6_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (ALT6).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__ALT7_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (ALT7).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__ALT8_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (ALT8).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__ALT_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (ALT).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__FAKE_TLS_AUTO_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (FAKE TLS AUTO).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__FAKE_TLS_AUTO_ALT2_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (FAKE TLS AUTO ALT2).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__FAKE_TLS_AUTO_ALT3_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (FAKE TLS AUTO ALT3).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__FAKE_TLS_AUTO_ALT_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (FAKE TLS AUTO ALT).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__SIMPLE_FAKE_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (SIMPLE FAKE).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
-  <data name="general__SIMPLE_FAKE_ALT_" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\general (SIMPLE FAKE ALT).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
   <data name="ipset_all" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ipset-all.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>

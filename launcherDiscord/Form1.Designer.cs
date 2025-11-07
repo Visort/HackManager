@@ -29,12 +29,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnChg = new System.Windows.Forms.Button();
             this.checkStatus = new System.Windows.Forms.Label();
-            this.listCode = new System.Windows.Forms.ListBox();
             this.tmrStarting = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listCode = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -109,21 +109,6 @@
             this.checkStatus.TabIndex = 3;
             this.checkStatus.Text = "status";
             // 
-            // listCode
-            // 
-            this.listCode.BackColor = System.Drawing.Color.Black;
-            this.listCode.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listCode.Font = new System.Drawing.Font("Lucida Fax", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listCode.ForeColor = System.Drawing.Color.LawnGreen;
-            this.listCode.FormattingEnabled = true;
-            this.listCode.ItemHeight = 14;
-            this.listCode.Location = new System.Drawing.Point(12, 12);
-            this.listCode.Name = "listCode";
-            this.listCode.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listCode.Size = new System.Drawing.Size(289, 280);
-            this.listCode.TabIndex = 5;
-            this.listCode.SelectedIndexChanged += new System.EventHandler(this.listCode_SelectedIndexChanged);
-            // 
             // tmrStarting
             // 
             this.tmrStarting.Interval = 250;
@@ -156,6 +141,14 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
+            // listCode
+            // 
+            this.listCode.ForeColor = System.Drawing.Color.LawnGreen;
+            this.listCode.Location = new System.Drawing.Point(12, 9);
+            this.listCode.Name = "listCode";
+            this.listCode.Size = new System.Drawing.Size(242, 280);
+            this.listCode.TabIndex = 5;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -180,7 +173,6 @@
             this.Text = "Hack Manage";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.Leave += new System.EventHandler(this.Form1_Leave);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -196,12 +188,11 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnChg;
         private System.Windows.Forms.Label checkStatus;
-        private System.Windows.Forms.ListBox listCode;
         private System.Windows.Forms.Timer tmrStarting;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.Label listCode;
     }
 }
-
