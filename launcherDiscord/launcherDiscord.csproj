@@ -104,17 +104,17 @@
     <EmbeddedResource Include="Resources\tls_clienthello_www_google_com.bin" />
     <EmbeddedResource Include="Resources\WinDivert64.sys" />
     <EmbeddedResource Include="Resources\service.bat" />
-    <None Include="Resources\general %28ALT%29.bat" />
-    <None Include="Resources\general %28ALT2%29.bat" />
-    <None Include="Resources\general %28ALT3%29.bat" />
-    <None Include="Resources\general %28ALT4%29.bat" />
-    <None Include="Resources\general %28ALT5%29.bat" />
-    <None Include="Resources\general %28ALT6%29.bat" />
-    <None Include="Resources\general %28ALT7%29.bat" />
-    <None Include="Resources\general %28FAKE TLS AUTO ALT%29.bat" />
-    <None Include="Resources\general %28FAKE TLS AUTO ALT2%29.bat" />
-    <None Include="Resources\general %28FAKE TLS AUTO%29.bat" />
-    <None Include="Resources\general.bat" />
+    <EmbeddedResource Include="Resources\general %28ALT%29.bat" />
+    <EmbeddedResource Include="Resources\general %28ALT2%29.bat" />
+    <EmbeddedResource Include="Resources\general %28ALT3%29.bat" />
+    <EmbeddedResource Include="Resources\general %28ALT4%29.bat" />
+    <EmbeddedResource Include="Resources\general %28ALT5%29.bat" />
+    <EmbeddedResource Include="Resources\general %28ALT6%29.bat" />
+    <EmbeddedResource Include="Resources\general %28ALT7%29.bat" />
+    <EmbeddedResource Include="Resources\general %28FAKE TLS AUTO ALT%29.bat" />
+    <EmbeddedResource Include="Resources\general %28FAKE TLS AUTO ALT2%29.bat" />
+    <EmbeddedResource Include="Resources\general %28FAKE TLS AUTO%29.bat" />
+    <EmbeddedResource Include="Resources\general.bat" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

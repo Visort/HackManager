@@ -18,7 +18,6 @@ namespace launcherDiscord
         private Dictionary<string, string> presetBatFiles;
         private List<string> allResourceFiles;
 
-        // Исправленный массив - ровно 20 элементов
         private readonly string[] loadouts = new string[20] {
             "\n> INITIATING SYSTEM BYPASS...",
             "\n> ACCESSING MAINFRAME...",
@@ -67,7 +66,19 @@ namespace launcherDiscord
             {
                 components?.Dispose();
                 processMonitorTimer?.Dispose();
-                runningProcess?.Dispose();
+
+                // Безопасное освобождение runningProcess
+                if (runningProcess != null)
+                {
+                    try
+                    {
+                        if (!runningProcess.HasExited)
+                            runningProcess.Kill();
+                    }
+                    catch { }
+                    runningProcess.Dispose();
+                    runningProcess = null;
+                }
             }
             base.Dispose(disposing);
         }
@@ -104,6 +115,13 @@ namespace launcherDiscord
                             tmrStarting.Stop();
                             progressStart.Value = 0;
                             listCode.Text += "\n> HACKING PROCESS TERMINATED UNEXPECTEDLY!";
+
+                            // Сбрасываем runningProcess
+                            if (runningProcess != null)
+                            {
+                                runningProcess.Dispose();
+                                runningProcess = null;
+                            }
                         }
                     }));
                 }
@@ -241,14 +259,13 @@ namespace launcherDiscord
             {
                 Stopping();
                 System.Threading.Thread.Sleep(2000);
-                CleanupResourcesWithRetry();
+                resourceManager.CleanupWithDirectoryDeletion();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Safe shutdown error: {ex.Message}");
             }
         }
-
         private void CleanupResourcesWithRetry()
         {
             int maxRetries = 5;
@@ -457,6 +474,20 @@ namespace launcherDiscord
                     RedirectStandardError = true
                 };
 
+                // Сначала проверяем и освобождаем предыдущий процесс
+                if (runningProcess != null)
+                {
+                    try
+                    {
+                        if (!runningProcess.HasExited)
+                            runningProcess.Kill();
+                    }
+                    catch { }
+                    runningProcess.Dispose();
+                    runningProcess = null;
+                }
+
+                // Создаем новый процесс
                 runningProcess = new Process();
                 runningProcess.StartInfo = startInfo;
                 runningProcess.EnableRaisingEvents = true;
@@ -465,7 +496,15 @@ namespace launcherDiscord
                 {
                     this.Invoke(new Action(() =>
                     {
-                        listCode.Text += $"\n> Command process exited with code: {runningProcess.ExitCode}";
+                        // Проверяем что процесс еще существует
+                        if (runningProcess != null && !runningProcess.HasExited)
+                        {
+                            listCode.Text += $"\n> Command process exited with code: {runningProcess.ExitCode}";
+                        }
+                        else
+                        {
+                            listCode.Text += $"\n> Command process exited";
+                        }
                     }));
                 };
 
@@ -508,12 +547,15 @@ namespace launcherDiscord
                     }
                 }
 
-                if (runningProcess != null && !runningProcess.HasExited)
+                if (runningProcess != null)
                 {
                     try
                     {
-                        runningProcess.Kill();
-                        runningProcess.WaitForExit(2000);
+                        if (!runningProcess.HasExited)
+                        {
+                            runningProcess.Kill();
+                            runningProcess.WaitForExit(2000);
+                        }
                     }
                     catch (Exception ex)
                     {

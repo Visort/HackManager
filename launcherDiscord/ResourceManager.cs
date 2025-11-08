@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 namespace launcherDiscord
 {
@@ -46,7 +47,126 @@ namespace launcherDiscord
                 throw;
             }
         }
+        public void DeleteTempDirectory()
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(_tempDirectory) || !Directory.Exists(_tempDirectory))
+                    return;
 
+                Thread.Sleep(1000);
+                int maxRetries = 5;
+                int retryDelay = 500;
+
+                for (int attempt = 1; attempt <= maxRetries; attempt++)
+                {
+                    try
+                    {
+                        string[] files = Directory.GetFiles(_tempDirectory, "*.*", SearchOption.AllDirectories);
+                        foreach (string file in files)
+                        {
+                            try
+                            {
+                                File.SetAttributes(file, FileAttributes.Normal);
+                                File.Delete(file);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error deleting file {file}: {ex.Message}");
+                            }
+                        }
+
+                        string[] directories = Directory.GetDirectories(_tempDirectory);
+                        foreach (string directory in directories)
+                        {
+                            try
+                            {
+                                Directory.Delete(directory, true);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error deleting directory {directory}: {ex.Message}");
+                            }
+                        }
+
+                        Directory.Delete(_tempDirectory, true);
+                        Console.WriteLine($"Temp directory deleted successfully: {_tempDirectory}");
+                        return;
+                    }
+                    catch (IOException ex) when (attempt < maxRetries)
+                    {
+                        Console.WriteLine($"Attempt {attempt} failed: {ex.Message}. Retrying in {retryDelay}ms...");
+                        Thread.Sleep(retryDelay);
+                    }
+                    catch (UnauthorizedAccessException ex) when (attempt < maxRetries)
+                    {
+                        Console.WriteLine($"Attempt {attempt} failed: {ex.Message}. Retrying in {retryDelay}ms...");
+                        Thread.Sleep(retryDelay);
+                    }
+                }
+
+                Console.WriteLine("Failed to delete temp directory after all retries");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error deleting temp directory: {ex.Message}");
+            }
+        }
+
+        public void ForceDeleteTempDirectory()
+        {
+            try
+            {
+                ForceKillAllProcesses();
+                DeleteTempDirectory();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in force delete: {ex.Message}");
+            }
+        }
+        public void CleanupWithDirectoryDeletion()
+        {
+            Cleanup();
+            DeleteTempDirectory();
+        }
+        private void ForceKillAllProcesses()
+        {
+            try
+            {
+                var processes = new[] { "winws", "cmd" };
+
+                foreach (string processName in processes)
+                {
+                    try
+                    {
+                        var processesList = Process.GetProcessesByName(processName);
+                        foreach (var process in processesList)
+                        {
+                            try
+                            {
+                                if (!process.HasExited)
+                                {
+                                    process.Kill();
+                                    process.WaitForExit(2000);
+                                }
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                Thread.Sleep(1000);
+            }
+            catch
+            {
+            }
+        }
         public Process StartHiddenProcess(string fileName, string arguments = "", string workingDirectory = null)
         {
             try
