@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace launcherDiscord
 {
@@ -38,6 +39,7 @@ namespace launcherDiscord
             _tempDirectory = Path.Combine(Path.GetTempPath(), "HackingManage");
             _resourceCache = new Dictionary<string, byte[]>();
             InitializeTempDirectory();
+            CreateFolderStructure();
         }
 
         private void InitializeTempDirectory()
@@ -53,13 +55,34 @@ namespace launcherDiscord
                 else
                 {
                     Console.WriteLine($"Temp directory already exists: {_tempDirectory}");
-                    // Не удаляем существующую директорию, чтобы избежать ошибок доступа
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error initializing temp directory: {ex.Message}");
                 throw;
+            }
+        }
+
+        // Создание структуры папок
+        private void CreateFolderStructure()
+        {
+            try
+            {
+                // Создаем папки
+                string listsDir = Path.Combine(_tempDirectory, "lists");
+                string binDir = Path.Combine(_tempDirectory, "bin");
+
+                if (!Directory.Exists(listsDir))
+                    Directory.CreateDirectory(listsDir);
+                if (!Directory.Exists(binDir))
+                    Directory.CreateDirectory(binDir);
+
+                Console.WriteLine("Created folder structure: lists/, bin/");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating folder structure: {ex.Message}");
             }
         }
 
@@ -132,8 +155,7 @@ namespace launcherDiscord
         {
             try
             {
-                // Этот метод можно расширить для скрытия всех окон процесса
-                // В простейшем случае просто скрываем главное окно
+                // В простейшем случае просто пытаемся найти и скрыть любые окна процесса
             }
             catch (Exception ex)
             {
@@ -144,144 +166,18 @@ namespace launcherDiscord
         // Запуск winws в скрытом режиме
         public Process StartWinwsHidden(string arguments = "")
         {
-            string winwsPath = GetTempFilePath("winws.exe");
+            string winwsPath = GetFilePath("winws.exe");
 
-            if (!FileExistsInTemp("winws.exe"))
+            if (!FileExists("winws.exe"))
             {
-                Console.WriteLine("winws.exe not found in temp directory");
+                Console.WriteLine("ERROR: winws.exe not found in bin directory");
                 return null;
             }
 
-            return StartHiddenProcess(winwsPath, arguments);
+            return StartHiddenProcess(winwsPath, arguments, Path.Combine(_tempDirectory, "bin"));
         }
 
-        // Метод для создания демо-версии winws, которая работает в фоне
-        private byte[] CreateHiddenWinwsDemo()
-        {
-            string demoContent = @"using System;
-                                   using System.Diagnostics;
-                                   using System.Runtime.InteropServices;
-                                   using System.Threading;
-
-                                   class Program
-                                   {
-                                   [DllImport(""user32.dll"")]
-                                   static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-                                   [DllImport(""kernel32.dll"")]
-                                   static extern IntPtr GetConsoleWindow();
-
-                                   const int SW_HIDE = 0;
-                                   const int SW_SHOW = 5;
-
-                                   static void Main(string[] args)
-                                   {
-                                   // Скрываем консоль сразу при запуске
-                                   var handle = GetConsoleWindow();
-                                   ShowWindow(handle, SW_HIDE);
-
-                                   // Имитация работы в фоне
-                                   for (int i = 0; i < 10; i++)
-                                   {
-                                   // Логируем в файл вместо консоли
-                                   System.IO.File.AppendAllText(""winws_log.txt"", $""WinWS working... iteration {i}\n"");
-                                   Thread.Sleep(1000);
-                                    }
-
-                                   System.IO.File.AppendAllText(""winws_log.txt"", ""WinWS completed successfully\n"");
-                                 }
-                               }";
-
-            // Компилируем C# код в exe
-            return CompileCSharpCode(demoContent, "winws.exe");
-        }
-
-        private byte[] CompileCSharpCode(string code, string outputName)
-        {
-            try
-            {
-                // В реальной реализации здесь должна быть компиляция кода
-                // Для демо версии создаем простой .bat файл, который работает скрыто
-                string batContent = @"@echo off
-                                      chcp 65001 > nul
-                                      echo WinWS Hidden Process Simulation > winws_log.txt
-                                      for /l %%x in (1, 1, 10) do (
-                                      echo Iteration %%x >> winws_log.txt
-                                      timeout /t 1 /nobreak >nul
-                                      )
-                                      echo WinWS completed successfully >> winws_log.txt
-                                      exit";
-
-                return Encoding.UTF8.GetBytes(batContent);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Compilation error: {ex.Message}");
-                return CreateSimpleHiddenBatch();
-            }
-        }
-
-        private byte[] CreateSimpleHiddenBatch()
-        {
-            string content = @"@echo off
-                               chcp 65001 > nul
-                               echo Hidden process simulation > hidden_log.txt
-                               ping 127.0.0.1 -n 10 > nul
-                               echo Process completed >> hidden_log.txt
-                               exit";
-            return Encoding.UTF8.GetBytes(content);
-        }
-
-        public bool ExtractResourceToTemp(string fileName)
-        {
-            try
-            {
-                // Проверяем, существует ли файл уже в temp директории
-                string tempPath = Path.Combine(_tempDirectory, fileName);
-                if (File.Exists(tempPath))
-                {
-                    Console.WriteLine($"File already exists in temp: {fileName}");
-                    return true;
-                }
-
-                byte[] fileBytes = GetFileFromResources(fileName);
-                if (fileBytes != null && fileBytes.Length > 0)
-                {
-                    File.WriteAllBytes(tempPath, fileBytes);
-                    Console.WriteLine($"Extracted: {fileName} -> {tempPath} ({fileBytes.Length} bytes)");
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine($"Resource not found or empty: {fileName}");
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error extracting {fileName}: {ex.Message}");
-                return false;
-            }
-        }
-
-        public void ExtractMultipleResources(IEnumerable<string> fileNames)
-        {
-            foreach (string fileName in fileNames)
-            {
-                ExtractResourceToTemp(fileName);
-            }
-        }
-
-        public string GetTempFilePath(string fileName)
-        {
-            return Path.Combine(_tempDirectory, fileName);
-        }
-
-        public bool FileExistsInTemp(string fileName)
-        {
-            return File.Exists(GetTempFilePath(fileName));
-        }
-
+        // Метод для получения файла из ресурсов
         private byte[] GetFileFromResources(string fileName)
         {
             try
@@ -291,90 +187,15 @@ namespace launcherDiscord
                     return _resourceCache[fileName];
                 }
 
-                var resourceManager = Properties.Resources.ResourceManager;
-                string resourceName = Path.GetFileNameWithoutExtension(fileName);
-
-                byte[] fileBytes = null;
-
-                try
-                {
-                    object resourceObject = resourceManager.GetObject(resourceName);
-                    if (resourceObject is byte[] bytes)
-                    {
-                        fileBytes = bytes;
-                        Console.WriteLine($"Loaded {fileName} as byte[] ({fileBytes.Length} bytes)");
-                    }
-                    else if (resourceObject is string stringContent)
-                    {
-                        if (fileName.EndsWith(".bat") || fileName.EndsWith(".txt"))
-                        {
-                            fileBytes = Encoding.UTF8.GetBytes(stringContent);
-                            Console.WriteLine($"Loaded {fileName} as string ({fileBytes.Length} bytes)");
-                        }
-                        else
-                        {
-                            try
-                            {
-                                fileBytes = Convert.FromBase64String(stringContent);
-                                Console.WriteLine($"Loaded {fileName} from Base64 string ({fileBytes.Length} bytes)");
-                            }
-                            catch (FormatException)
-                            {
-                                fileBytes = Encoding.UTF8.GetBytes(stringContent);
-                                Console.WriteLine($"Loaded {fileName} as UTF8 string ({fileBytes.Length} bytes)");
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error getting resource object for {fileName}: {ex.Message}");
-                }
-
-                if (fileBytes == null || fileBytes.Length == 0)
-                {
-                    fileBytes = GetFileFromEmbeddedResources(fileName);
-                    if (fileBytes != null)
-                    {
-                        Console.WriteLine($"Loaded {fileName} from embedded resources ({fileBytes.Length} bytes)");
-                    }
-                }
-
-                // Особый случай для winws.exe - создаем демо, которое работает скрыто
-                if (fileName.Equals("winws.exe", StringComparison.OrdinalIgnoreCase) &&
-                    (fileBytes == null || fileBytes.Length == 0))
-                {
-                    Console.WriteLine($"Creating hidden demo version for: {fileName}");
-                    fileBytes = CreateHiddenWinwsDemo();
-                }
-                else if (fileBytes == null || fileBytes.Length == 0)
-                {
-                    Console.WriteLine($"Creating demo content for: {fileName}");
-                    fileBytes = CreateDemoFileContent(fileName);
-                }
-
-                _resourceCache[fileName] = fileBytes;
-                return fileBytes;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading resource {fileName}: {ex.Message}");
-                return CreateDemoFileContent(fileName);
-            }
-        }
-
-        private byte[] GetFileFromEmbeddedResources(string fileName)
-        {
-            try
-            {
+                // Пытаемся найти ресурс в сборке
                 var assembly = Assembly.GetExecutingAssembly();
                 string[] resourceNames = assembly.GetManifestResourceNames();
 
+                // Ищем ресурс по имени файла
                 string fullResourceName = resourceNames.FirstOrDefault(name =>
                     name.EndsWith(fileName, StringComparison.OrdinalIgnoreCase) ||
                     name.EndsWith("." + fileName, StringComparison.OrdinalIgnoreCase) ||
-                    name.Contains(fileName) ||
-                    name.EndsWith(Path.GetFileNameWithoutExtension(fileName), StringComparison.OrdinalIgnoreCase));
+                    name.Contains(fileName));
 
                 if (fullResourceName != null)
                 {
@@ -385,85 +206,247 @@ namespace launcherDiscord
                         {
                             byte[] buffer = new byte[stream.Length];
                             stream.Read(buffer, 0, buffer.Length);
+                            _resourceCache[fileName] = buffer;
+                            Console.WriteLine($"Loaded resource {fileName} - {buffer.Length} bytes");
                             return buffer;
                         }
                     }
                 }
+
+                Console.WriteLine($"Resource not found: {fileName}");
+                Console.WriteLine($"Available resources: {string.Join(", ", resourceNames)}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading resource {fileName}: {ex.Message}");
+                return null;
+            }
+        }
+
+        // Метод для получения полного пути к файлу в структуре
+        public string GetFilePath(string fileName)
+        {
+            // Проверяем корневые bat файлы
+            var rootBatchFiles = new[]
+            {
+                "general.bat", "general (ALT).bat", "general (ALT2).bat", "general (ALT3).bat",
+                "general (ALT4).bat", "general (ALT5).bat", "general (ALT6).bat", "general (ALT7).bat",
+                "general (FAKE TLS AUTO ALT).bat", "general (FAKE TLS AUTO ALT2).bat",
+                "general (FAKE TLS AUTO ALT3).bat", "general (FAKE TLS AUTO).bat",
+                "general (SIMPLE FAKE ALT).bat", "general (SIMPLE FAKE).bat", "service.bat"
+            };
+
+            if (rootBatchFiles.Contains(fileName, StringComparer.OrdinalIgnoreCase))
+                return Path.Combine(_tempDirectory, fileName);
+
+            // Проверяем файлы в lists
+            var listsFiles = new[]
+            {
+                "ipset-all.txt", "ipset-all.txt.backup", "ipset-exclude.txt",
+                "list-exclude.txt", "list-general.txt", "list-google.txt"
+            };
+
+            if (listsFiles.Contains(fileName, StringComparer.OrdinalIgnoreCase))
+                return Path.Combine(_tempDirectory, "lists", fileName);
+
+            // Проверяем файлы в bin
+            var binFiles = new[]
+            {
+                "winws.exe", "quic_initial_www_google_com.bin", "tls_clienthello_4pda_to.bin",
+                "tls_clienthello_www_google_com.bin", "WinDivert.dll", "WinDivert64.sys", "cygwin1.dll"
+            };
+
+            if (binFiles.Contains(fileName, StringComparer.OrdinalIgnoreCase))
+                return Path.Combine(_tempDirectory, "bin", fileName);
+
+            // По умолчанию ищем в корне
+            return Path.Combine(_tempDirectory, fileName);
+        }
+
+        // Проверка существования файла
+        public bool FileExists(string fileName)
+        {
+            string filePath = GetFilePath(fileName);
+            bool exists = File.Exists(filePath);
+            if (!exists)
+            {
+                Console.WriteLine($"File not found: {filePath}");
+            }
+            return exists;
+        }
+
+        // Извлечение ресурса во временную директорию
+        public bool ExtractResourceToTemp(string fileName)
+        {
+            try
+            {
+                string filePath = GetFilePath(fileName);
+
+                // Проверяем, существует ли файл уже
+                if (File.Exists(filePath))
+                {
+                    Console.WriteLine($"File already exists: {fileName}");
+                    return true;
+                }
+
+                byte[] fileBytes = GetFileFromResources(fileName);
+                if (fileBytes != null && fileBytes.Length > 0)
+                {
+                    // Создаем директорию, если она не существует
+                    string directory = Path.GetDirectoryName(filePath);
+                    if (!Directory.Exists(directory))
+                        Directory.CreateDirectory(directory);
+
+                    File.WriteAllBytes(filePath, fileBytes);
+                    Console.WriteLine($"Extracted: {fileName} -> {filePath} ({fileBytes.Length} bytes)");
+                    return true;
+                }
                 else
                 {
-                    Console.WriteLine($"Embedded resource not found: {fileName}");
-                    Console.WriteLine("Available resources:");
-                    foreach (var name in resourceNames)
-                    {
-                        Console.WriteLine($"  - {name}");
-                    }
+                    Console.WriteLine($"ERROR: Resource not found or empty: {fileName}");
+                    return false;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading embedded resource {fileName}: {ex.Message}");
+                Console.WriteLine($"ERROR extracting {fileName}: {ex.Message}");
+                return false;
             }
-
-            return null;
         }
 
-        private byte[] CreateDemoFileContent(string fileName)
+        // Извлечение нескольких ресурсов
+        public void ExtractMultipleResources(IEnumerable<string> fileNames)
         {
-            if (fileName.EndsWith(".bat"))
+            int successCount = 0;
+            int failCount = 0;
+
+            foreach (string fileName in fileNames)
             {
-                string demoContent = $@"@echo off
-                                        chcp 65001 > nul
-                                        echo Executing preset: {fileName}
-                                        echo Temp directory: {_tempDirectory}
-                                        echo Files available:
-                                        dir ""{_tempDirectory}""
-                                        echo Hacking simulation in progress...
-                                        timeout /t 3 /nobreak >nul
-                                        echo Operation completed successfully
-                                        pause";
-                return Encoding.UTF8.GetBytes(demoContent);
+                if (ExtractResourceToTemp(fileName))
+                {
+                    successCount++;
+                }
+                else
+                {
+                    failCount++;
+                    Console.WriteLine($"FAILED to extract: {fileName}");
+                }
             }
-            else if (fileName.EndsWith(".txt"))
-            {
-                string demoContent = $"# Demo {fileName}\n# Generated for testing purposes\n127.0.0.1\n8.8.8.8";
-                return Encoding.UTF8.GetBytes(demoContent);
-            }
-            else if (fileName.EndsWith(".exe") || fileName.EndsWith(".dll") || fileName.EndsWith(".sys"))
-            {
-                byte[] peHeader = new byte[1024];
-                Encoding.UTF8.GetBytes("This is a demo " + fileName).CopyTo(peHeader, 0);
-                Console.WriteLine($"Created demo binary file: {fileName} ({peHeader.Length} bytes)");
-                return peHeader;
-            }
-            else if (fileName.EndsWith(".bin"))
-            {
-                byte[] binContent = new byte[512];
-                Encoding.UTF8.GetBytes("Demo binary content for " + fileName).CopyTo(binContent, 0);
-                Console.WriteLine($"Created demo bin file: {fileName} ({binContent.Length} bytes)");
-                return binContent;
-            }
-            else
-            {
-                Console.WriteLine($"Unknown file type: {fileName}, creating empty file");
-                return new byte[0];
-            }
+
+            Console.WriteLine($"Extraction completed: {successCount} successful, {failCount} failed");
         }
 
+        // Получение пути к временной директории
+        public string GetTempFilePath(string fileName)
+        {
+            return GetFilePath(fileName);
+        }
+
+        // Проверка существования файла во временной директории
+        public bool FileExistsInTemp(string fileName)
+        {
+            return FileExists(fileName);
+        }
+
+        // Очистка ресурсов
         public void Cleanup()
         {
             try
             {
-                // Очищаем кэш, но не удаляем файлы из временной директории
+                // Очищаем кэш
                 _resourceCache.Clear();
                 Console.WriteLine("Resource cache cleared");
 
                 // Не удаляем временную директорию, чтобы избежать ошибок доступа
-                // Directory.Delete(_tempDirectory, true);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Cleanup error: {ex.Message}");
             }
+        }
+
+        // Получение списка всех созданных файлов
+        public List<string> GetAllCreatedFiles()
+        {
+            var files = new List<string>();
+
+            try
+            {
+                // Корневые bat файлы
+                var rootBatchFiles = new[]
+                {
+                    "general.bat", "general (ALT).bat", "general (ALT2).bat", "general (ALT3).bat",
+                    "general (ALT4).bat", "general (ALT5).bat", "general (ALT6).bat", "general (ALT7).bat",
+                    "general (FAKE TLS AUTO ALT).bat", "general (FAKE TLS AUTO ALT2).bat",
+                    "general (FAKE TLS AUTO ALT3).bat", "general (FAKE TLS AUTO).bat",
+                    "general (SIMPLE FAKE ALT).bat", "general (SIMPLE FAKE).bat", "service.bat"
+                };
+
+                files.AddRange(rootBatchFiles.Where(f => FileExists(f)));
+
+                // Файлы в lists
+                var listsFiles = new[]
+                {
+                    "ipset-all.txt", "ipset-all.txt.backup", "ipset-exclude.txt",
+                    "list-exclude.txt", "list-general.txt", "list-google.txt"
+                };
+
+                files.AddRange(listsFiles.Where(f => FileExists(f)));
+
+                // Файлы в bin
+                var binFiles = new[]
+                {
+                    "winws.exe", "quic_initial_www_google_com.bin", "tls_clienthello_4pda_to.bin",
+                    "tls_clienthello_www_google_com.bin", "WinDivert.dll", "WinDivert64.sys", "cygwin1.dll"
+                };
+
+                files.AddRange(binFiles.Where(f => FileExists(f)));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting file list: {ex.Message}");
+            }
+
+            return files;
+        }
+
+        // Проверка целостности всех необходимых файлов
+        public bool VerifyAllFiles()
+        {
+            var allRequiredFiles = new[]
+            {
+                // Корневые bat файлы
+                "general.bat", "service.bat",
+                
+                // Важные файлы в lists
+                "list-general.txt", "ipset-all.txt",
+                
+                // Критичные файлы в bin
+                "winws.exe", "WinDivert.dll", "WinDivert64.sys"
+            };
+
+            bool allFilesExist = true;
+
+            foreach (var file in allRequiredFiles)
+            {
+                if (!FileExists(file))
+                {
+                    Console.WriteLine($"MISSING FILE: {file}");
+                    allFilesExist = false;
+                }
+            }
+
+            if (allFilesExist)
+            {
+                Console.WriteLine("All required files are present");
+            }
+            else
+            {
+                Console.WriteLine("ERROR: Some required files are missing!");
+            }
+
+            return allFilesExist;
         }
     }
 }

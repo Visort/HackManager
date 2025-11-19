@@ -180,7 +180,7 @@
             this.Text = "Hack Manage";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.Leave += new System.EventHandler(this.Form1_Leave);
+            
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);

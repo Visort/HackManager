@@ -49,10 +49,6 @@ namespace launcherDiscord
         // Windows API для скрытия окон
         [DllImport("user32.dll")]
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
-        [DllImport("user32.dll")]
-        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         private const int SW_HIDE = 0;
         private const int SW_SHOW = 5;
@@ -112,6 +108,7 @@ namespace launcherDiscord
                             progressStart.Value = 0;
                             listCode.Items.Add("> HACKING PROCESS TERMINATED UNEXPECTEDLY!");
                             listCode.TopIndex = listCode.Items.Count - 1;
+                            btnChg.Enabled = true;
                         }
                     }));
                 }
@@ -143,43 +140,10 @@ namespace launcherDiscord
                 {
                     ShowWindow(process.MainWindowHandle, SW_HIDE);
                 }
-
-                // Скрываем все дочерние окна
-                HideChildProcessWindows(process.Id);
             }
             catch (Exception ex)
             {
                 // Игнорируем ошибки скрытия
-            }
-        }
-
-        private void HideChildProcessWindows(int parentProcessId)
-        {
-            try
-            {
-                // Получаем все процессы с тем же именем
-                var allProcesses = Process.GetProcesses();
-                foreach (var proc in allProcesses)
-                {
-                    try
-                    {
-                        if (proc.Id != parentProcessId && proc.ProcessName.ToLower().Contains("winws"))
-                        {
-                            if (proc.MainWindowHandle != IntPtr.Zero)
-                            {
-                                ShowWindow(proc.MainWindowHandle, SW_HIDE);
-                            }
-                        }
-                    }
-                    catch
-                    {
-                        // Пропускаем процессы, к которым нет доступа
-                    }
-                }
-            }
-            catch
-            {
-                // Игнорируем ошибки
             }
         }
 
@@ -223,14 +187,21 @@ namespace launcherDiscord
                 "general (FAKE TLS AUTO).bat",
                 "general (SIMPLE FAKE ALT).bat",
                 "general (SIMPLE FAKE).bat",
-                
-                // Все зависимости
-                "winws.exe",
-                "list-general.txt",
-                "quic_initial_www_google_com.bin",
-                "tls_clienthello_www_google_com.bin",
-                "ipset-all.txt",
                 "service.bat",
+                
+                // Файлы в папке lists
+                "ipset-all.txt",
+                "ipset-all.txt.backup",
+                "ipset-exclude.txt",
+                "list-exclude.txt",
+                "list-general.txt",
+                "list-google.txt",
+                
+                // Файлы в папке bin
+                "winws.exe",
+                "quic_initial_www_google_com.bin",
+                "tls_clienthello_4pda_to.bin",
+                "tls_clienthello_www_google_com.bin",
                 "WinDivert.dll",
                 "WinDivert64.sys",
                 "cygwin1.dll"
@@ -246,9 +217,26 @@ namespace launcherDiscord
         {
             try
             {
-                Console.WriteLine("Loading all resources...");
+                Console.WriteLine("Loading all resources from embedded resources...");
+
                 resourceManager.ExtractMultipleResources(allResourceFiles);
-                Console.WriteLine("All resources loaded successfully");
+
+                // Проверяем целостность файлов после загрузки
+                if (!resourceManager.VerifyAllFiles())
+                {
+                    MessageBox.Show("Some required files are missing from resources!\nThe application may not work properly.",
+                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+                // Показываем список созданных файлов
+                var createdFiles = resourceManager.GetAllCreatedFiles();
+                listCode.Items.Add($"> Loaded {createdFiles.Count} files from resources");
+                listCode.Items.Add($"> Temp directory: {resourceManager.TempDirectory}");
+
+                // Проверяем конкретно BAT файлы
+                CheckBatFiles();
+
+                listCode.TopIndex = listCode.Items.Count - 1;
             }
             catch (Exception ex)
             {
@@ -258,12 +246,29 @@ namespace launcherDiscord
             }
         }
 
+        private void CheckBatFiles()
+        {
+            listCode.Items.Add("> Checking BAT files...");
+            foreach (var batFile in presetBatFiles.Values)
+            {
+                string batPath = resourceManager.GetTempFilePath(batFile);
+                bool exists = File.Exists(batPath);
+                long fileSize = exists ? new FileInfo(batPath).Length : 0;
+                listCode.Items.Add($"> {batFile}: {(exists ? $"EXISTS ({fileSize} bytes)" : "MISSING")}");
+            }
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             progressStart.Minimum = 0;
             progressStart.Maximum = 100;
             progressStart.Value = 0;
-            UpdateSelectedPresetDisplay();
+            
+
+            // Устанавливаем начальный статус
+            checkStatus.ForeColor = Color.Crimson;
+            listCode.Items.Add("> System ready - Select preset and start hacking");
+            listCode.TopIndex = listCode.Items.Count - 1;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -275,7 +280,10 @@ namespace launcherDiscord
                     e.Cancel = true;
                     this.Hide();
                     notifyIcon1.Visible = true;
-                    return; // Не завершаем приложение, просто скрываем
+                    notifyIcon1.ShowBalloonTip(3000, "Launcher Discord",
+                        "Application minimized to tray. Hacking processes are still running.",
+                        ToolTipIcon.Info);
+                    return;
                 }
             }
 
@@ -302,101 +310,12 @@ namespace launcherDiscord
                 // Даем время процессам завершиться
                 System.Threading.Thread.Sleep(2000);
 
-                // Очищаем ресурсы с повторными попытками
-                CleanupResourcesWithRetry();
+                // Очищаем ресурсы
+                resourceManager.Cleanup();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Safe shutdown error: {ex.Message}");
-            }
-        }
-
-        private void CleanupResourcesWithRetry()
-        {
-            int maxRetries = 5;
-            int retryDelay = 1000; // 1 секунда
-
-            for (int attempt = 1; attempt <= maxRetries; attempt++)
-            {
-                try
-                {
-                    resourceManager.Cleanup();
-                    Console.WriteLine($"Cleanup successful on attempt {attempt}");
-                    return;
-                }
-                catch (UnauthorizedAccessException ex)
-                {
-                    Console.WriteLine($"Cleanup attempt {attempt} failed: {ex.Message}");
-
-                    if (attempt < maxRetries)
-                    {
-                        Console.WriteLine($"Waiting {retryDelay}ms before retry...");
-                        System.Threading.Thread.Sleep(retryDelay);
-
-                        // Дополнительная попытка завершить процессы
-                        ForceKillAllProcesses();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Max retries reached, skipping cleanup");
-                        // На последней попытке просто пропускаем ошибку
-                        break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Unexpected cleanup error on attempt {attempt}: {ex.Message}");
-                    break;
-                }
-            }
-        }
-
-        private void ForceKillAllProcesses()
-        {
-            try
-            {
-                // Завершаем все winws процессы
-                var winwsProcesses = Process.GetProcessesByName("winws");
-                foreach (var process in winwsProcesses)
-                {
-                    try
-                    {
-                        if (!process.HasExited)
-                        {
-                            process.Kill();
-                            process.WaitForExit(1000);
-                        }
-                    }
-                    catch
-                    {
-                        // Игнорируем ошибки при завершении
-                    }
-                }
-
-                // Завершаем cmd процессы, которые могут использовать наши файлы
-                var cmdProcesses = Process.GetProcessesByName("cmd");
-                foreach (var process in cmdProcesses)
-                {
-                    try
-                    {
-                        // Проверяем, относится ли процесс к нашему приложению
-                        if (!process.HasExited && process.MainWindowTitle.Contains("general"))
-                        {
-                            process.Kill();
-                            process.WaitForExit(1000);
-                        }
-                    }
-                    catch
-                    {
-                        // Игнорируем ошибки
-                    }
-                }
-
-                System.Threading.Thread.Sleep(500);
-            }
-            catch
-            {
-                // Игнорируем общие ошибки
             }
         }
 
@@ -405,19 +324,22 @@ namespace launcherDiscord
             return btnStart.Text == "stop hacking" || Process.GetProcessesByName("winws").Length > 0;
         }
 
-        private void UpdateSelectedPresetDisplay()
-        {
-            // Ваш код обновления отображения выбранного пресета
-        }
+        
 
         private void btnChg_Click(object sender, EventArgs e)
         {
-            preset preset = new preset();
-            preset.SelectedPreset = selectedPreset;
-            if (preset.ShowDialog() == DialogResult.OK)
+            if (IsHackingActive())
             {
-                selectedPreset = preset.SelectedPreset;
-                UpdateSelectedPresetDisplay();
+                MessageBox.Show("Cannot change preset while hacking is active!\nStop hacking first.",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            preset presetForm = new preset();
+            
+            if (presetForm.ShowDialog() == DialogResult.OK)
+            {
+                
 
                 listCode.Items.Add($"> Preset changed to: {selectedPreset}");
                 listCode.TopIndex = listCode.Items.Count - 1;
@@ -439,6 +361,9 @@ namespace launcherDiscord
             else
             {
                 tmrStarting.Stop();
+                listCode.Items.Add("> HACKING MODE: ACTIVE");
+                listCode.Items.Add("> All processes running in background");
+                listCode.TopIndex = listCode.Items.Count - 1;
             }
         }
 
@@ -453,12 +378,16 @@ namespace launcherDiscord
                     tmrStarting.Start();
                     checkStatus.ForeColor = Color.LawnGreen;
                     processMonitorTimer.Start();
+
+                    // Блокируем кнопку смены пресета во время работы
+                    btnChg.Enabled = false;
                 }
                 else
                 {
                     checkStatus.ForeColor = Color.Crimson;
                     listCode.Items.Clear();
-                    listCode.Items.Add("> HACKING FAILED - PRESET NOT FOUND!");
+                    listCode.Items.Add("> HACKING FAILED - CHECK CONFIGURATION!");
+                    listCode.TopIndex = listCode.Items.Count - 1;
                 }
             }
             else
@@ -472,12 +401,18 @@ namespace launcherDiscord
                 progressStart.Value = 0;
                 listCode.Items.Clear();
                 listCode.Items.Add("> HACKING TERMINATED!!!");
+                listCode.Items.Add("> All processes stopped");
+                listCode.TopIndex = listCode.Items.Count - 1;
+
+                // Разблокируем кнопку смены пресета
+                btnChg.Enabled = true;
             }
         }
 
         private bool Starting()
         {
-            listCode.Items.Add($"> Debug: selectedPreset = '{selectedPreset}'");
+            listCode.Items.Add($"> Starting hacking process...");
+            listCode.Items.Add($"> Selected preset: '{selectedPreset}'");
 
             if (string.IsNullOrEmpty(selectedPreset))
             {
@@ -488,14 +423,40 @@ namespace launcherDiscord
 
             if (!presetBatFiles.ContainsKey(selectedPreset))
             {
-                listCode.Items.Add($"> Debug: Available presets: {string.Join(", ", presetBatFiles.Keys)}");
+                listCode.Items.Add($"> ERROR: Invalid preset: {selectedPreset}");
                 MessageBox.Show($"INVALID PRESET: {selectedPreset}\nPLEASE SELECT A VALID PRESET", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
             string batFileName = presetBatFiles[selectedPreset];
-            listCode.Items.Add($"> Debug: batFileName = '{batFileName}'");
+            listCode.Items.Add($"> BAT file: '{batFileName}'");
+
+            // Проверяем наличие всех необходимых файлов
+            if (!resourceManager.VerifyAllFiles())
+            {
+                MessageBox.Show("Some required files are missing from resources!\nCannot start hacking process.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            // Дополнительная проверка BAT файла
+            string batFilePath = resourceManager.GetTempFilePath(batFileName);
+            if (!File.Exists(batFilePath))
+            {
+                listCode.Items.Add($"> ERROR: BAT file not found: {batFilePath}");
+                return false;
+            }
+
+            // Проверяем размер BAT файла
+            FileInfo batFileInfo = new FileInfo(batFilePath);
+            listCode.Items.Add($"> BAT file size: {batFileInfo.Length} bytes");
+
+            if (batFileInfo.Length == 0)
+            {
+                listCode.Items.Add($"> ERROR: BAT file is empty: {batFileName}");
+                return false;
+            }
 
             return RunBatFileHidden(batFileName);
         }
@@ -506,25 +467,22 @@ namespace launcherDiscord
             {
                 string batFilePath = resourceManager.GetTempFilePath(batFileName);
 
-                if (!resourceManager.FileExistsInTemp(batFileName))
-                {
-                    listCode.Items.Add($"> ERROR: BAT file not found: {batFileName}");
-                    listCode.Items.Add($"> Available files in temp: {string.Join(", ", Directory.GetFiles(resourceManager.TempDirectory).Select(Path.GetFileName))}");
-                    return false;
-                }
-
                 listCode.Items.Add($"> Starting preset: {selectedPreset}");
                 listCode.Items.Add($"> Executing: {batFileName}");
+                listCode.Items.Add($"> Full path: {batFilePath}");
                 listCode.Items.Add($"> Temp directory: {resourceManager.TempDirectory}");
                 listCode.Items.Add($"> MODE: HIDDEN PROCESS");
 
+                // Устанавливаем переменные окружения
                 Environment.SetEnvironmentVariable("GameFilter", "8080,27015-27030,37015-37030", EnvironmentVariableTarget.Process);
-                Environment.SetEnvironmentVariable("LISTS", resourceManager.TempDirectory + "\\", EnvironmentVariableTarget.Process);
+                Environment.SetEnvironmentVariable("LISTS", Path.Combine(resourceManager.TempDirectory, "lists"), EnvironmentVariableTarget.Process);
+                Environment.SetEnvironmentVariable("BIN", Path.Combine(resourceManager.TempDirectory, "bin"), EnvironmentVariableTarget.Process);
 
                 return ExecuteBatFileHidden(batFilePath);
             }
             catch (Exception ex)
             {
+                listCode.Items.Add($"> ERROR executing BAT file: {ex.Message}");
                 MessageBox.Show($"Error executing BAT file: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -551,32 +509,79 @@ namespace launcherDiscord
                 runningProcess.StartInfo = startInfo;
                 runningProcess.EnableRaisingEvents = true;
 
+                // Обработка вывода
+                runningProcess.OutputDataReceived += (sender, e) =>
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                    {
+                        this.Invoke(new Action(() =>
+                        {
+                            listCode.Items.Add($"> [OUTPUT] {e.Data}");
+                            listCode.TopIndex = listCode.Items.Count - 1;
+                        }));
+                    }
+                };
+
+                runningProcess.ErrorDataReceived += (sender, e) =>
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                    {
+                        this.Invoke(new Action(() =>
+                        {
+                            listCode.Items.Add($"> [ERROR] {e.Data}");
+                            listCode.TopIndex = listCode.Items.Count - 1;
+                        }));
+                    }
+                };
+
                 runningProcess.Exited += (sender, e) =>
                 {
                     this.Invoke(new Action(() =>
                     {
                         listCode.Items.Add($"> Command process exited with code: {runningProcess.ExitCode}");
+                        if (btnStart.Text == "stop hacking")
+                        {
+                            listCode.Items.Add($"> Process terminated unexpectedly");
+                            Stopping();
+                            btnStart.Text = "start hacking";
+                            checkStatus.ForeColor = Color.Crimson;
+                            btnChg.Enabled = true;
+                        }
                     }));
                 };
 
-                runningProcess.Start();
+                bool started = runningProcess.Start();
+                listCode.Items.Add($"> Process start result: {started}");
 
-                // Немедленно начинаем скрывать связанные процессы
-                Task.Run(async () =>
+                if (started)
                 {
-                    await Task.Delay(2000); // Ждем запуска winws
-                    HideAllWinwsWindows();
-                });
+                    runningProcess.BeginOutputReadLine();
+                    runningProcess.BeginErrorReadLine();
 
-                listCode.Items.Add($"> Process started HIDDEN");
-                listCode.Items.Add($"> PID: {runningProcess.Id}");
-                listCode.Items.Add($"> Working directory: {resourceManager.TempDirectory}");
-                listCode.Items.Add($"> WinWS will run in background (hidden)");
+                    listCode.Items.Add($"> Process started HIDDEN");
+                    listCode.Items.Add($"> PID: {runningProcess.Id}");
+                    listCode.Items.Add($"> Working directory: {resourceManager.TempDirectory}");
+                    listCode.Items.Add($"> WinWS will run in background (hidden)");
 
-                return true;
+                    // Немедленно начинаем скрывать связанные процессы
+                    Task.Run(async () =>
+                    {
+                        await Task.Delay(2000);
+                        HideAllWinwsWindows();
+                    });
+
+                    listCode.TopIndex = listCode.Items.Count - 1;
+                    return true;
+                }
+                else
+                {
+                    listCode.Items.Add($"> ERROR: Failed to start process");
+                    return false;
+                }
             }
             catch (Exception ex)
             {
+                listCode.Items.Add($"> ERROR in ExecuteBatFileHidden: {ex.Message}");
                 MessageBox.Show($"Error executing BAT file: {ex.Message}", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -588,14 +593,26 @@ namespace launcherDiscord
             try
             {
                 var processes = Process.GetProcessesByName("winws");
+                listCode.Items.Add($"> Found {processes.Length} winws processes to hide");
+
                 foreach (var process in processes)
                 {
                     HideProcessWindow(process);
                 }
+
+                // Также скрываем возможные cmd окна
+                var cmdProcesses = Process.GetProcessesByName("cmd");
+                foreach (var process in cmdProcesses)
+                {
+                    if (process.MainWindowTitle.Contains("general"))
+                    {
+                        HideProcessWindow(process);
+                    }
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                // Игнорируем ошибки
+                listCode.Items.Add($"> Error hiding windows: {ex.Message}");
             }
         }
 
@@ -607,6 +624,8 @@ namespace launcherDiscord
 
                 // Сначала завершаем процессы winws.exe
                 var winwsProcesses = Process.GetProcessesByName("winws");
+                listCode.Items.Add($"> Found {winwsProcesses.Length} winws processes to terminate");
+
                 foreach (var process in winwsProcesses)
                 {
                     try
@@ -648,16 +667,13 @@ namespace launcherDiscord
                 System.Threading.Thread.Sleep(1000);
 
                 listCode.Items.Add("> Cleanup completed");
+                listCode.TopIndex = listCode.Items.Count - 1;
             }
             catch (Exception ex)
             {
                 listCode.Items.Add($"> Cleanup error: {ex.Message}");
+                listCode.TopIndex = listCode.Items.Count - 1;
             }
-        }
-
-        private void Form1_Leave(object sender, EventArgs e)
-        {
-            // Не останавливаем автоматически при потере фокуса
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
@@ -688,12 +704,15 @@ namespace launcherDiscord
             {
                 this.Hide();
                 notifyIcon1.Visible = true;
+                notifyIcon1.ShowBalloonTip(1000, "Launcher Discord",
+                    "Application minimized to tray", ToolTipIcon.Info);
             }
         }
 
         private void listCode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Ваш код
+            // Автопрокрутка вниз при добавлении новых элементов
+            listCode.TopIndex = listCode.Items.Count - 1;
         }
     }
 }
