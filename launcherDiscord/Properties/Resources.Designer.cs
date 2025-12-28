@@ -81,12 +81,12 @@ namespace launcherDiscord.Properties {
         ///call service.bat load_game_filter
         ///echo:
         ///
-        ///set &quot;BIN=%~dp0&quot;
-        ///set &quot;LISTS=%~dp0&quot;
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
         ///cd /d %BIN%
         ///
         ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=&quot;%BIN%quic_initial_ww [остаток строки не уместился]&quot;;.
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general {
             get {
@@ -99,12 +99,18 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; -- [остаток строки не уместился]&quot;;.
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__ALT_ {
             get {
@@ -117,12 +123,42 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; -- [остаток строки не уместился]&quot;;.
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string general__ALT10_ {
+            get {
+                return ResourceManager.GetString("general__ALT10_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на @echo off
+        ///chcp 65001 &gt; nul
+        ///:: 65001 - UTF-8
+        ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
+        ///
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
+        ///
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__ALT2_ {
             get {
@@ -135,11 +171,18 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; --dp [остаток строки не уместился]&quot;;.
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
+        ///
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__ALT3_ {
             get {
@@ -152,11 +195,18 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; --dp [остаток строки не уместился]&quot;;.
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
+        ///
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__ALT4_ {
             get {
@@ -170,12 +220,18 @@ namespace launcherDiscord.Properties {
         ///:: 65001 - UTF-8
         ///:: NOT RECOMMENDED
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot; [остаток строки не уместился]&quot;;.
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclu [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__ALT5_ {
             get {
@@ -188,11 +244,18 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; --dp [остаток строки не уместился]&quot;;.
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
+        ///
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__ALT6_ {
             get {
@@ -211,12 +274,12 @@ namespace launcherDiscord.Properties {
         ///call service.bat load_game_filter
         ///echo:
         ///
-        ///set &quot;BIN=%~dp0&quot;
-        ///set &quot;LISTS=%~dp0&quot;
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
         ///cd /d %BIN%
         ///
         ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=&quot;%BIN%quic_initial_ww [остаток строки не уместился]&quot;;.
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__ALT7_ {
             get {
@@ -229,11 +292,18 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; --dp [остаток строки не уместился]&quot;;.
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
+        ///
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__ALT8_ {
             get {
@@ -246,12 +316,42 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; - [остаток строки не уместился]&quot;;.
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string general__ALT9_ {
+            get {
+                return ResourceManager.GetString("general__ALT9_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на @echo off
+        ///chcp 65001 &gt; nul
+        ///:: 65001 - UTF-8
+        ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
+        ///
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
+        ///
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__FAKE_TLS_AUTO_ {
             get {
@@ -264,11 +364,18 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; --d [остаток строки не уместился]&quot;;.
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
+        ///
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__FAKE_TLS_AUTO_ALT_ {
             get {
@@ -281,11 +388,18 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; --d [остаток строки не уместился]&quot;;.
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
+        ///
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__FAKE_TLS_AUTO_ALT2_ {
             get {
@@ -298,11 +412,18 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=11 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; --d [остаток строки не уместился]&quot;;.
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
+        ///
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__FAKE_TLS_AUTO_ALT3_ {
             get {
@@ -315,12 +436,18 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; -- [остаток строки не уместился]&quot;;.
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__SIMPLE_FAKE_ {
             get {
@@ -333,11 +460,18 @@ namespace launcherDiscord.Properties {
         ///chcp 65001 &gt; nul
         ///:: 65001 - UTF-8
         ///
+        ///cd /d &quot;%~dp0&quot;
+        ///call service.bat status_zapret
+        ///call service.bat check_updates
+        ///call service.bat load_game_filter
+        ///echo:
         ///
-        ///start &quot;zapret: %~n0&quot; /min &quot;winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
-        ///--filter-udp=443 --hostlist=&quot;list-general.txt&quot; --dpi-desync=fake --dpi-desync-repeats=6 --dpi-desync-fake-quic=&quot;quic_initial_www_google_com.bin&quot; --new ^
-        ///--filter-udp=19294-19344,50000-50100 --filter-l7=discord,stun --dpi-desync=fake --dpi-desync-repeats=6 --new ^
-        ///--filter-tcp=80 --hostlist=&quot;list-general.txt&quot; --dp [остаток строки не уместился]&quot;;.
+        ///set &quot;BIN=%~dp0bin\&quot;
+        ///set &quot;LISTS=%~dp0lists\&quot;
+        ///cd /d %BIN%
+        ///
+        ///start &quot;zapret: %~n0&quot; /min &quot;%BIN%winws.exe&quot; --wf-tcp=80,443,2053,2083,2087,2096,8443,%GameFilter% --wf-udp=443,19294-19344,50000-50100,%GameFilter% ^
+        ///--filter-udp=443 --hostlist=&quot;%LISTS%list-general.txt&quot; --hostlist-exclude=&quot;%LISTS%list-exclude.txt&quot; --ipset-exclude=&quot;%LISTS%ipset- [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string general__SIMPLE_FAKE_ALT_ {
             get {
@@ -356,17 +490,73 @@ namespace launcherDiscord.Properties {
         }
         
         /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
+        ///   Ищет локализованную строку, похожую на 10.0.0.0/8
+        ///127.0.0.0/8
+        ///172.16.0.0/12
+        ///192.168.0.0/16
+        ///169.254.0.0/16
+        ///::1
+        ///fc00::/7
+        ///fe80::/10.
         /// </summary>
-        internal static byte[] ipset_all_txt {
+        internal static string ipset_exclude {
             get {
-                object obj = ResourceManager.GetObject("ipset_all_txt", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("ipset_exclude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на pusher.com
+        ///live-video.net
+        ///ttvnw.net
+        ///twitch.tv
+        ///mail.ru
+        ///citilink.ru
+        ///yandex.com
+        ///nvidia.com
+        ///donationalerts.com
+        ///vk.com
+        ///yandex.kz
+        ///mts.ru
+        ///multimc.org
+        ///ya.ru
+        ///dns-shop.ru
+        ///habr.com
+        ///3dnews.ru
+        ///sberbank.ru
+        ///ozon.ru
+        ///wildberries.ru
+        ///microsoft.com
+        ///msi.com
+        ///akamaitechnologies.com
+        ///2ip.ru
+        ///yandex.ru
+        ///.
+        /// </summary>
+        internal static string list_exclude {
+            get {
+                return ResourceManager.GetString("list_exclude", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на cloudflare-ech.com
+        ///encryptedsni.com
+        ///cloudflareaccess.com
+        ///cloudflareapps.com
+        ///cloudflarebolt.com
+        ///cloudflareclient.com
+        ///cloudflareinsights.com
+        ///cloudflareok.com
+        ///cloudflarepartners.com
+        ///cloudflareportal.com
+        ///cloudflarepreview.com
+        ///cloudflareresolve.com
+        ///cloudflaressl.com
+        ///cloudflarestatus.com
+        ///cloudflarestorage.com
+        ///cloudflarestream.com
+        ///cloudflaretest.com
         ///dis.gd
         ///discord-attachments-uploads-prd.storage.googleapis.com
         ///discord.app
@@ -375,30 +565,37 @@ namespace launcherDiscord.Properties {
         ///discord.design
         ///discord.dev
         ///discord.gift
-        ///discord.gifts
-        ///discord.gg
-        ///discord.media
-        ///discord.new
-        ///discord.store
-        ///discord.status
-        ///discord-activities.com
-        ///discordactivities.com
-        ///discordapp.com
-        ///discordapp.net
-        ///discordcdn.com
-        ///discordmerch.com
-        ///discordpartygames.com
-        ///discordsays.com
-        ///discordsez.com
-        ///yt3.ggpht.com
-        ///yt4.ggpht.com
-        ///yt3.googleusercontent.com
-        ///googlevideo.com
-        ///jnn-pa.googleapis. [остаток строки не уместился]&quot;;.
+        ///disco [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string list_general {
             get {
                 return ResourceManager.GetString("list_general", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на yt3.ggpht.com
+        ///yt4.ggpht.com
+        ///yt3.googleusercontent.com
+        ///googlevideo.com
+        ///jnn-pa.googleapis.com
+        ///stable.dl2.discordapp.net
+        ///wide-youtube.l.google.com
+        ///youtube-nocookie.com
+        ///youtube-ui.l.google.com
+        ///youtube.com
+        ///youtubeembeddedplayer.googleapis.com
+        ///youtubekids.com
+        ///youtubei.googleapis.com
+        ///youtu.be
+        ///yt-video-upload.l.google.com
+        ///ytimg.com
+        ///ytimg.l.google.com
+        ///.
+        /// </summary>
+        internal static string list_google {
+            get {
+                return ResourceManager.GetString("list_google", resourceCulture);
             }
         }
         
@@ -414,7 +611,7 @@ namespace launcherDiscord.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на @echo off
-        ///set &quot;LOCAL_VERSION=1.8.5&quot;
+        ///set &quot;LOCAL_VERSION=1.9.0b&quot;
         ///
         ///:: External commands
         ///if &quot;%~1&quot;==&quot;status_zapret&quot; (
@@ -441,11 +638,21 @@ namespace launcherDiscord.Properties {
         ///if &quot;%1&quot;==&quot;admin&quot; (
         ///    echo Started with admin rights
         ///) else (
-        ///    echo Reque [остаток строки не уместился]&quot;;.
+        ///    echo Requ [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string service {
             get {
                 return ResourceManager.GetString("service", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Byte[].
+        /// </summary>
+        internal static byte[] tls_clienthello_4pda_to {
+            get {
+                object obj = ResourceManager.GetObject("tls_clienthello_4pda_to", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

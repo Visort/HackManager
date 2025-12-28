@@ -75,10 +75,6 @@
     <EmbeddedResource Include="preset.resx">
       <DependentUpon>preset.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\winws.exe" />
-    <EmbeddedResource Include="Resources\WinDivert.dll" />
-    <EmbeddedResource Include="Resources\ipset-all.txt" />
-    <EmbeddedResource Include="Resources\list-general.txt" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -99,14 +95,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Resources\ipset-all.txt.backup" />
     <EmbeddedResource Include="Resources\general %28ALT%29.bat" />
+    <EmbeddedResource Include="Resources\general %28ALT10%29.bat" />
     <EmbeddedResource Include="Resources\general %28ALT2%29.bat" />
     <EmbeddedResource Include="Resources\general %28ALT3%29.bat" />
     <EmbeddedResource Include="Resources\general %28ALT4%29.bat" />
     <EmbeddedResource Include="Resources\general %28ALT5%29.bat" />
     <EmbeddedResource Include="Resources\general %28ALT6%29.bat" />
-    <EmbeddedResource Include="Resources\cygwin1.dll" />
+    <EmbeddedResource Include="Resources\general %28ALT7%29.bat" />
     <EmbeddedResource Include="Resources\general %28ALT8%29.bat" />
+    <EmbeddedResource Include="Resources\general %28ALT9%29.bat" />
     <EmbeddedResource Include="Resources\general %28FAKE TLS AUTO ALT%29.bat" />
     <EmbeddedResource Include="Resources\general %28FAKE TLS AUTO ALT2%29.bat" />
     <EmbeddedResource Include="Resources\general %28FAKE TLS AUTO ALT3%29.bat" />
@@ -114,17 +113,24 @@
     <EmbeddedResource Include="Resources\general %28SIMPLE FAKE ALT%29.bat" />
     <EmbeddedResource Include="Resources\general %28SIMPLE FAKE%29.bat" />
     <EmbeddedResource Include="Resources\general.bat" />
-    <EmbeddedResource Include="Resources\ipset-all.txt.backup" />
     <EmbeddedResource Include="Resources\quic_initial_www_google_com.bin" />
-    <EmbeddedResource Include="Resources\tls_clienthello_www_google_com.bin" />
-    <EmbeddedResource Include="Resources\WinDivert64.sys" />
     <EmbeddedResource Include="Resources\service.bat" />
-    <EmbeddedResource Include="Resources\general %28ALT7%29.bat" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ipset-all.txt" />
+    <EmbeddedResource Include="Resources\ipset-exclude.txt" />
+    <EmbeddedResource Include="Resources\list-exclude.txt" />
+    <EmbeddedResource Include="Resources\list-google.txt" />
+    <EmbeddedResource Include="Resources\list-general.txt" />
+    <EmbeddedResource Include="Resources\tls_clienthello_4pda_to.bin" />
+    <EmbeddedResource Include="Resources\tls_clienthello_www_google_com.bin" />
+    <EmbeddedResource Include="Resources\WinDivert64.sys" />
+    <EmbeddedResource Include="Resources\winws.exe" />
+    <EmbeddedResource Include="Resources\cygwin1.dll" />
+    <EmbeddedResource Include="Resources\WinDivert.dll" />
     <Content Include="watchlogo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

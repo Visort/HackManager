@@ -124,6 +124,9 @@
   <data name="general" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\general.bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="general__ALT10_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\general (ALT10).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
   <data name="general__ALT2_" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\general (ALT2).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
@@ -144,6 +147,9 @@
   </data>
   <data name="general__ALT8_" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\general (ALT8).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="general__ALT9_" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\general (ALT9).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="general__ALT_" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\general (ALT).bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
@@ -169,17 +175,26 @@
   <data name="ipset_all" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ipset-all.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
-  <data name="ipset_all_txt" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ipset-all.txt.backup;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="ipset_exclude" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ipset-exclude.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="list_exclude" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\list-exclude.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="list_general" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\list-general.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="list_google" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\list-google.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="quic_initial_www_google_com" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\quic_initial_www_google_com.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="service" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\service.bat;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="tls_clienthello_4pda_to" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tls_clienthello_4pda_to.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="tls_clienthello_www_google_com" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\tls_clienthello_www_google_com.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
